@@ -1,0 +1,25 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: gulimall-product
+  datasource:
+    username: root
+    password: 520517li
+    url: jdbc:mysql://43.139.29.111:13306/gulimall_pms
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud:
+    nacos:
+      username: nacos
+      password: 520517li
+      discovery:
+        server-addr: 43.139.29.111:8848
+mybatis-plus:
+  mapper-locations: casspath:/mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto
+server:
+  port: 10000
+
