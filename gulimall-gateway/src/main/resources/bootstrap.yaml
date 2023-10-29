@@ -4,10 +4,12 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: test_route
-          uri: https://www.baidu.com
+        - id: admin_route
+          uri: lb://renren-fast
           predicates:
-            - Query=url,baidu
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
     nacos:
       username: nacos
       password: 520517li

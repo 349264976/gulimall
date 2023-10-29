@@ -127,25 +127,6 @@
 
 
 <!--        swagger 以及增强插件knif4j依赖-->
-
-        <!--前3项swagger本篇章必须，其他为了之后使用-->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
-            <version>2.0.6</version>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>1.5.22</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
     <properties>
         <java.version>1.8</java.version>
