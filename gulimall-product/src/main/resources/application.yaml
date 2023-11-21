@@ -15,11 +15,19 @@ spring:
       password: 520517li
       discovery:
         server-addr: 43.139.29.111:8848
+    alicloud:
+      access-key: LTAI5tJ28mXbNx6zYB8GSXRA
+      access-secret: L6WpPQ9gH6hE67k6FBucaxIQMMHOr4
+      oss:
+        endpoint: oss-cn-chengdu.aliyuncs.com
 mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: casspath:/mapper/**/*.xml
   global-config:
     db-config:
       id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 server:
   port: 10000
-

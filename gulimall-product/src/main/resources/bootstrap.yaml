@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: gulimall-product
+  cloud:
+    nacos:
+      username: nacos
+      password: 520517li
+      discovery:
+        server-addr: 43.139.29.111:8848
+      config:
+        namespace: df97e3f6-fb61-4f34-84ad-cc07f83dbd08
