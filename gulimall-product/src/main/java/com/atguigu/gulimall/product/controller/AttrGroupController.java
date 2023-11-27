@@ -1,8 +1,10 @@
 package com.atguigu.gulimall.product.controller;
 
+import com.atguigu.gulimall.product.service.CategoryService;
 import java.util.Arrays;
 import java.util.Map;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,17 +28,20 @@ import com.atguigu.common.utils.R;
  */
 @RestController
 @RequestMapping("product/attrgroup")
+@RequiredArgsConstructor
 public class AttrGroupController {
-    @Autowired
-    private AttrGroupService attrGroupService;
+
+    private final AttrGroupService attrGroupService;
+
+    private final CategoryService categoryService;
 
     /**
      * 列表
      */
-    @RequestMapping("/list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = attrGroupService.queryPage(params);
-
+    @RequestMapping("/list/{catelogId}")
+    public R list(@RequestParam Map<String, Object> params,@PathVariable Long catelogId){
+//        PageUtils page = attrGroupService.queryPage(params);
+        PageUtils page = attrGroupService.queryPage(params,catelogId);
         return R.ok().put("page", page);
     }
 
@@ -47,7 +52,8 @@ public class AttrGroupController {
     @RequestMapping("/info/{attrGroupId}")
     public R info(@PathVariable("attrGroupId") Long attrGroupId){
 		AttrGroupEntity attrGroup = attrGroupService.getById(attrGroupId);
-
+        Long catelogId = attrGroup.getCatelogId();
+        Long[] path= categoryService.findCateLogPath(catelogId);
         return R.ok().put("attrGroup", attrGroup);
     }
 

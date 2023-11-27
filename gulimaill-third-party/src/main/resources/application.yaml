@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: gulimall-third-party
+  cloud:
+    nacos:
+      username: nacos
+      password: 520517li
+      discovery:
+        server-addr: 43.139.29.111:8848
+    alicloud:
+      access-key: LTAI5tJ28mXbNx6zYB8GSXRA
+      secret-key: L6WpPQ9gH6hE67k6FBucaxIQMMHOr4
+#      access-key: LTAI5tJ28mXbNx6zYB8GSXRA
+#      access-secret: L6WpPQ9gH6hE67k6FBucaxIQMMHOr4
+      oss:
+        endpoint: oss-cn-chengdu.aliyuncs.com
+        bucket: gulimall-lke
+server:
+  port: 30000

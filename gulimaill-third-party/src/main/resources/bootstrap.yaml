@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: third-party
+  cloud:
+    nacos:
+      username: nacos
+      password: 520517li
+      discovery:
+        server-addr: 43.139.29.111:8848
+      config:
+        namespace: 29aed637-932c-4144-a741-77a597b57b9e
+        ext-config:
+          - data-id: oss.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+
+
+

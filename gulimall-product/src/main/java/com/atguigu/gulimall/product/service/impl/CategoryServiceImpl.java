@@ -1,8 +1,8 @@
 package com.atguigu.gulimall.product.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
@@ -60,6 +60,27 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         baseMapper.deleteBatchIds(list);
     }
 
+    /**
+     * 找到完整路径
+     * @param catelogId
+     * @return
+     */
+    @Override
+    public Long[] findCateLogPath(Long catelogId) {
+        ArrayList<Long> paths = new ArrayList<>();
+        List<Long> parentPath = findParentPath(catelogId, paths);
+        return paths.toArray(new Long[parentPath.size()]);
+    }
+
+    private  List<Long> findParentPath(Long catelogId,List<Long> paths) {
+            //手机当前节点id
+        CategoryEntity byId = this.getById(catelogId);
+        if (byId.getParentCid()!=0){
+                findParentPath(byId.getParentCid(),paths);
+        }
+
+        return null;
+    }
     /**
      * 递归查找所有菜单的子菜单
      *
