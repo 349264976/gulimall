@@ -4,12 +4,10 @@ import com.atguigu.common.vaild.AddGroup;
 import com.atguigu.common.vaild.UpdateGroup;
 import com.atguigu.common.vaild.UpdateGroupStatus;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -84,9 +82,10 @@ public class BrandController {
     /**
      * 修改
      */
+    @Transactional
     @RequestMapping("/update")
     public R update(@Validated(UpdateGroup.class)@RequestBody BrandEntity brand){
-		brandService.updateById(brand);
+		brandService.updateDetail(brand);
         return R.ok();
     }
 

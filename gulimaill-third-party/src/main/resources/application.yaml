@@ -17,3 +17,4 @@ spring:
         bucket: gulimall-lke
 server:
   port: 30000
+

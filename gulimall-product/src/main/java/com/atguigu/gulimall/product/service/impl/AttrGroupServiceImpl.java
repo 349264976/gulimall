@@ -1,6 +1,14 @@
 package com.atguigu.gulimall.product.service.impl;
 
+import com.atguigu.gulimall.product.dao.AttrAttrgroupRelationDao;
+import com.atguigu.gulimall.product.entity.AttrAttrgroupRelationEntity;
+import com.atguigu.gulimall.product.service.AttrAttrgroupRelationService;
+import com.atguigu.gulimall.product.vo.AttrGroupRelationVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -30,21 +38,24 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
 
     @Override
     public PageUtils queryPage(Map<String, Object> params, Long catalogId) {
-        if (catalogId==0){
-            PageUtils pageUtils = this.queryPage(params);
-            return pageUtils;
-        }else {
-            String key = (String) params.get("key");
+        String key = (String) params.get("key");
 
-            LambdaQueryWrapper<AttrGroupEntity> attrGroupEntityLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<AttrGroupEntity> attrGroupEntityLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if (!StringUtils.isEmpty(key)){
+            attrGroupEntityLambdaQueryWrapper.and(wrapper -> {
+                wrapper.eq(AttrGroupEntity::getAttrGroupId,key)
+                        .or()
+                        .like(AttrGroupEntity::getAttrGroupName,key);
+            });
+        }
+
+        if (catalogId==0){
+            IPage<AttrGroupEntity> page = this.page(
+                    new Query<AttrGroupEntity>().getPage(params),
+                    attrGroupEntityLambdaQueryWrapper);
+            return new PageUtils(page);
+        }else {
             attrGroupEntityLambdaQueryWrapper.eq(AttrGroupEntity::getCatelogId,catalogId);
-            if (!StringUtils.isEmpty(key)){
-                attrGroupEntityLambdaQueryWrapper.and(wrapper -> {
-                    wrapper.eq(AttrGroupEntity::getAttrGroupId,key)
-                            .or()
-                            .like(AttrGroupEntity::getAttrGroupName,key);
-                });
-            }
 //            QueryWrapper<AttrGroupEntity> attrGroupEntityQueryWrapper = new QueryWrapper<>();
 //            attrGroupEntityQueryWrapper.eq("catelog_id", catalogId);
 //            if (!StringUtils.isEmpty(key)) {
@@ -60,5 +71,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
             return new PageUtils(page);
         }
     }
+
+
 
 }

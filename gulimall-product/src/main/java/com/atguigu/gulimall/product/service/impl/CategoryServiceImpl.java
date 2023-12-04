@@ -1,11 +1,12 @@
 package com.atguigu.gulimall.product.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.atguigu.gulimall.product.entity.CategoryBrandRelationEntity;
+import com.atguigu.gulimall.product.service.CategoryBrandRelationService;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +16,7 @@ import com.atguigu.common.utils.Query;
 import com.atguigu.gulimall.product.dao.CategoryDao;
 import com.atguigu.gulimall.product.entity.CategoryEntity;
 import com.atguigu.gulimall.product.service.CategoryService;
+import org.springframework.util.StringUtils;
 
 
 @Service("categoryService")
@@ -22,6 +24,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
 //    @Autowired
 //    private CategoryDao categoryDao;
+    @Autowired
+    CategoryBrandRelationService categoryBrandRelationService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -69,17 +73,40 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     public Long[] findCateLogPath(Long catelogId) {
         ArrayList<Long> paths = new ArrayList<>();
         List<Long> parentPath = findParentPath(catelogId, paths);
+        Collections.reverse(parentPath);
         return paths.toArray(new Long[parentPath.size()]);
     }
+
+    /**
+     * 级联更新所有关联的数据
+     * @param category
+     */
+    @Override
+    public void updateCascade(CategoryEntity category) {
+
+        boolean b = updateById(category);
+        /**
+         * 保证关联表的 相同id的字段修改一起修改一致性问题
+         */
+        if (!StringUtils.isEmpty(category.getName())){
+            /**
+             * 更新所有表的品牌名字
+             */
+            LambdaUpdateWrapper<CategoryBrandRelationEntity> setwrapper = new LambdaUpdateWrapper<CategoryBrandRelationEntity>().eq(CategoryBrandRelationEntity::getCatelogId, category.getCatId())
+                    .set(CategoryBrandRelationEntity::getCatelogName, category.getName());
+            categoryBrandRelationService.update(setwrapper);
+            // TODO更新其他关联表
+        }
+}
 
     private  List<Long> findParentPath(Long catelogId,List<Long> paths) {
             //手机当前节点id
         CategoryEntity byId = this.getById(catelogId);
+        paths.add(catelogId);
         if (byId.getParentCid()!=0){
                 findParentPath(byId.getParentCid(),paths);
         }
-
-        return null;
+        return paths;
     }
     /**
      * 递归查找所有菜单的子菜单

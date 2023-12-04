@@ -10,6 +10,23 @@
         <result property="attrGroupId" column="attr_group_id"/>
         <result property="attrSort" column="attr_sort"/>
     </resultMap>
+    <delete id="deleteBatch">
+        DELETE FROM pms_attr_attrgroup_relation WHERE
+        <foreach collection="Entitys" item="item" separator=" OR ">
+            (attr_id = #{item.attrId} AND attr_group_id = #{item.attrGroupId})
+        </foreach>
+    </delete>
+
+<!--    <delete id="deleteid">-->
+<!--        DELETE FROM pms_attr_attrgroup_relation WHERE attr_id = #{id}-->
+<!--    </delete>-->
+
+    <!--    <delete id="deleteBatch">-->
+<!--        DELETE FROM `pms_attr_attrgroup_relation` WHERE-->
+<!--        <foreach collection="Entitys" item="item" separator=" OR ">-->
+<!--            (attr_id = #{item.attrId} AND attr_group_id = #{item.attrGroupId})-->
+<!--        </foreach>-->
+<!--    </delete>-->
 
 
 </mapper>

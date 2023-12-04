@@ -9,39 +9,29 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.atguigu.gulimall</groupId>
-	<artifactId>gulimall-member</artifactId>
+	<artifactId>gulimall-gateway</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>gulimall-member</name>
-	<description>gulimall-member</description>
+	<name>gulimall-gateway</name>
+	<description>gulimall-gateway</description>
 	<properties>
 		<java.version>8</java.version>
 		<spring-cloud.version>2021.0.1</spring-cloud.version>
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
+			<artifactId>spring-cloud-starter-gateway</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!--		引入公共依赖conmon-->
 		<dependency>
 			<groupId>com.hmuser</groupId>
 			<artifactId>gulimall-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>io.springfox</groupId>
-					<artifactId>springfox-boot-starter</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
