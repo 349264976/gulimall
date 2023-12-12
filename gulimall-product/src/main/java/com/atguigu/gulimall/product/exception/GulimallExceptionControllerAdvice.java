@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
-@ControllerAdvice
-@ResponseBody
-@RestControllerAdvice(basePackages ="com.atguigu.gulimall.product.controller")
+//@ControllerAdvice
+//@ResponseBody
+//@RestControllerAdvice(basePackages ="com.atguigu.gulimall.product.controller")
 public class GulimallExceptionControllerAdvice {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public R handleVaildException(MethodArgumentNotValidException e){

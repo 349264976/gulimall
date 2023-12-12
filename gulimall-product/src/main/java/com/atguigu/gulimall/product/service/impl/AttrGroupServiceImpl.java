@@ -2,9 +2,13 @@ package com.atguigu.gulimall.product.service.impl;
 
 import com.atguigu.gulimall.product.dao.AttrAttrgroupRelationDao;
 import com.atguigu.gulimall.product.entity.AttrAttrgroupRelationEntity;
+import com.atguigu.gulimall.product.entity.AttrEntity;
 import com.atguigu.gulimall.product.service.AttrAttrgroupRelationService;
+import com.atguigu.gulimall.product.service.AttrService;
 import com.atguigu.gulimall.product.vo.AttrGroupRelationVo;
+import com.atguigu.gulimall.product.vo.AttrGroupWithAttrsVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +29,9 @@ import org.springframework.util.StringUtils;
 
 @Service("attrGroupService")
 public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEntity> implements AttrGroupService {
+
+    @Autowired
+    AttrService attrService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -72,6 +79,39 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
         }
     }
 
+    /**
+     * 根据分类id查出所有分组以及这些组里面的属性
+     * @param catelogId
+     * @return
+     */
+    @Override
+    public List<AttrGroupWithAttrsVo> getAttrGroupWithAttrsByCatelogId(Long catelogId) {
+
+        //1.查询分组信息
+
+        List<AttrGroupEntity> list = this.list(new LambdaQueryWrapper<AttrGroupEntity>()
+                .eq(AttrGroupEntity::getCatelogId,catelogId)
+        );
+        /**
+         * 2.查询所有当前分组的属性
+         */
+        List<AttrGroupWithAttrsVo> collect = list.stream().map(
+                x -> {
+                    AttrGroupWithAttrsVo attrGroupWithAttrsVo = new AttrGroupWithAttrsVo();
+
+                    BeanUtils.copyProperties(x, attrGroupWithAttrsVo);
+
+                    List<AttrEntity> attrs = attrService.getRelationAttr(x.getAttrGroupId());
+                    attrGroupWithAttrsVo.setAttrs(attrs);
+                    if(attrs==null){
+                        attrGroupWithAttrsVo.setAttrs( Collections.emptyList());
+                    }
+                    return attrGroupWithAttrsVo;
+                }
+        ).collect(Collectors.toList());
+
+        return collect;
+    }
 
 
 }

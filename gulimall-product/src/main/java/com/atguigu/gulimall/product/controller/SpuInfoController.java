@@ -1,5 +1,6 @@
 package com.atguigu.gulimall.product.controller;
 
+import com.atguigu.gulimall.product.vo.SpuSaveVo;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class SpuInfoController {
      */
     @RequestMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = spuInfoService.queryPage(params);
+        PageUtils page = spuInfoService.queryPageByCondition(params);
 
         return R.ok().put("page", page);
     }
@@ -55,9 +56,10 @@ public class SpuInfoController {
      * 保存
      */
     @RequestMapping("/save")
-    public R save(@RequestBody SpuInfoEntity spuInfo){
-		spuInfoService.save(spuInfo);
+    public R save(@RequestBody SpuSaveVo spuInfo){
+//		spuInfoService.save(spuInfo);
 
+        spuInfoService.saveSpuInfo(spuInfo);
         return R.ok();
     }
 

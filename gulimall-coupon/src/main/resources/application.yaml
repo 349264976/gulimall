@@ -1,84 +1,15 @@
 spring:
-    application:
-      name: gulimall-coupon
-#    cloud:
-#      nacos:
-#        discovery:
-#          server-addr: 192.168.10.102:8848
-#          config:
-#            file-configs:
-#              - dataId: gulimall-coupon.yaml
-#    datasource:
-#      username: root
-#      password: 520517li
-#      url: jdbc:mysql://192.168.10.102:3307/gulimall_sms
-#      driver-class-name: com.mysql.cj.jdbc.Driver
-#mybatis-plus:
-#  mapper-locations: casspath:/mapper/**/*.xml
-#  global-config:
-#    db-config:
-#      id-type: auto
+  application:
+    name: gulimall-coupon
+  cloud:
+    nacos:
+      username: nacos
+      password: 520517li
+      discovery:
+        server-addr: 43.139.29.111:8848
 server:
   port: 7000
 xuser:
   test:
     name: root
     age: 500
-springfox:
-  documentation:
-    swagger:
-      version: 3.0.0
-  api:
-    info:
-      title: "谷粒"  # API标题
-      description: "商城"  # API描述
-      version: "v1"  # API版本
-      contact:
-        name: "lken"  # 联系人姓名
-        url: "https:"  # 联系人URL
-        email: "349264976@qq.com"  # 联系人邮箱
-      license:
-        name: "license0.1"  # 许可证名称
-        url: ""  # 许可证URL
-    servers:
-      - url: "http://localhost:8080"  # 开发服务器
-        description: "Development server"
-      - url: "https://api.example.com"  # 生产服务器
-        description: "Production server"
-  paths:
-    /users:
-      get:
-        summary: "Get a list of users"
-        responses:
-          '200':
-            description: "A list of users"
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      name:
-                        type: string
-      post:
-        summary: "Create a new user"
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  name:
-                    type: string
-        responses:
-          '201':
-            description: "User created successfully"
-          '400':
-            description: "Invalid input"
-
-
-

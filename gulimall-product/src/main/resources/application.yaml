@@ -1,4 +1,7 @@
 spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -96,4 +99,5 @@ springfox:
           path: /api-docs  # Swagger API文档路径
     requestHandlerSelectors:
       basePackage: com.atguigu.gulimall.product
+
 

@@ -89,7 +89,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         LambdaQueryWrapper<AttrEntity> attrEntityLambdaQueryWrapper = new LambdaQueryWrapper<AttrEntity>()
                 .eq(AttrEntity::getAttrType,"base".equalsIgnoreCase(attrType)?ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode():ProductConstant.AttrEnum.ATTR_TYPE_SALE.getCode());
         if (categoryId!=0){
-            attrEntityLambdaQueryWrapper.eq(AttrEntity::getAttrId,categoryId);
+            attrEntityLambdaQueryWrapper.eq(AttrEntity::getCatelogId,categoryId);
 
         }
         String key = (String)params.get("key");
