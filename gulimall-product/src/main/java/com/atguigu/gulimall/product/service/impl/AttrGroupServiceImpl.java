@@ -8,9 +8,11 @@ import com.atguigu.gulimall.product.service.AttrService;
 import com.atguigu.gulimall.product.vo.AttrGroupRelationVo;
 import com.atguigu.gulimall.product.vo.AttrGroupWithAttrsVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,9 +104,11 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
                     BeanUtils.copyProperties(x, attrGroupWithAttrsVo);
 
                     List<AttrEntity> attrs = attrService.getRelationAttr(x.getAttrGroupId());
-                    attrGroupWithAttrsVo.setAttrs(attrs);
-                    if(attrs==null){
-                        attrGroupWithAttrsVo.setAttrs( Collections.emptyList());
+//                    attrGroupWithAttrsVo.setAttrs(attrs);
+                    if (CollectionUtils.isNotEmpty(attrs)){
+                        attrGroupWithAttrsVo.setAttrs(attrs);
+                    } else {
+                        attrGroupWithAttrsVo.setAttrs(new ArrayList<>());
                     }
                     return attrGroupWithAttrsVo;
                 }
