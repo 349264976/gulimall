@@ -2,6 +2,7 @@ package com.atguigu.gulimall.product.service.impl;
 
 import com.atguigu.common.TO.SkuReductionTo;
 import com.atguigu.common.TO.SpuBoundTo;
+import com.atguigu.common.TO.es.SkuEsModel;
 import com.atguigu.common.utils.R;
 import com.atguigu.gulimall.product.entity.*;
 import com.atguigu.gulimall.product.fegin.CouponFeignService;
@@ -9,6 +10,7 @@ import com.atguigu.gulimall.product.service.*;
 import com.atguigu.gulimall.product.vo.*;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,6 +55,14 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
     @Autowired
     CouponFeignService couponFeignService;
+
+    @Autowired
+    private BrandService brandService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<SpuInfoEntity> page = this.page(
@@ -227,6 +237,59 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public void up(Long spuId) {
+
+
+        List<SkuEsModel> upProductions= new ArrayList<SkuEsModel>();
+
+        //1.组装所需要的数据
+
+        SkuEsModel esModel = new SkuEsModel();
+
+        //1.查询出所有的sku信息
+
+        List<SkuInfoEntity> skuInfoEntities =   skuInfoService.getSkusBySpuid(spuId);
+
+        //2.封装sku信息
+        //TODO 4. 查询所有可以检索的skp的规格属性  Attrs  按照spu
+
+
+
+        upProductions = skuInfoEntities.stream().map(
+                x -> {
+                    SkuEsModel model = new SkuEsModel();
+
+                    BeanUtils.copyProperties(x,model);
+                    /**
+                     * 名字不一致的单独处理
+                     */
+                    model.setSkuPrice(x.getPrice());
+                    model.setSkuImg(x.getSkuDefaultImg());
+
+                    //TODO 1.发送远程调用是否有库存
+
+                    //TODO 2.热度评分
+
+                    //TODO 3. 查询品牌和分类的名字信息
+                    BrandEntity brandone = brandService.getById(model.getBrandId());
+
+                    esModel.setBrandName(brandone.getName());
+                    esModel.setBrandImg(brandone.getLogo());
+
+                    CategoryEntity categoryone = categoryService.getById(model.getCategoryId());
+
+                    esModel.setCatalogImg(categoryone.getIcon());
+
+                    return model;
+                }
+        ).collect(Collectors.toList());
+
+        //TODO 5.数据发送给es保存
+
+
     }
 
 }
