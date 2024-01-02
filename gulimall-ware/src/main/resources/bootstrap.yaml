@@ -12,11 +12,6 @@ spring:
       password: 520517li
       discovery:
         server-addr: 43.139.29.111:8848
-mybatis-plus:
-  mapper-locations: casspath:/mapper/**/*.xml
-  global-config:
-    db-config:
-      id-type: auto
 server:
   port: 11000
 

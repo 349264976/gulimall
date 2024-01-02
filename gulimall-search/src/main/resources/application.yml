@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: gulimall-search
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 43.139.29.111:8848
+        username: nacos
+        password: 520517li
+
+server:
+  port: 8989
+
