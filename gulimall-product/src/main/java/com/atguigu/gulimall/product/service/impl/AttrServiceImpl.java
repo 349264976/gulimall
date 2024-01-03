@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -266,6 +268,20 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         //2.4
         PageUtils pageUtils=new PageUtils(page);
         return pageUtils;
+    }
+
+
+    @Override
+    public List<Long> selectSearchAttrs(List<Long> attrids) {
+
+
+        list(new LambdaQueryWrapper<AttrEntity>()
+                .select(AttrEntity::getAttrId)
+                .in(AttrEntity::getAttrId,attrids)
+//                .eq(AttrEntity::get)
+        );
+
+       return   baseMapper.selectSearchAttrIds(attrids);
     }
 
 

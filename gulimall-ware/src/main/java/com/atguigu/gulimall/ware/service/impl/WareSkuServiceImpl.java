@@ -2,11 +2,14 @@ package com.atguigu.gulimall.ware.service.impl;
 
 import com.atguigu.common.utils.R;
 import com.atguigu.gulimall.ware.feign.ProductFeignService;
+import com.atguigu.gulimall.ware.vo.SkuHasStockVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -83,6 +86,28 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         }else {
             wareSkuDao.addStock(skuId,wareId,skuNum);
         }
+    }
+
+    @Override
+    public List<SkuHasStockVo> getSkusHasStock(List<Long> skuids) {
+
+        List<SkuHasStockVo> skuStockVos = skuids.stream().map(skuid -> {
+
+            SkuHasStockVo vo = new SkuHasStockVo();
+
+            //数据库查询出数据封装    //查新当前sku的总库存量
+          Long count= wareSkuDao.getSkuStock(skuid);
+
+          vo.setHasStock(count==null?false:count>0);
+
+          vo.setSkuId(skuid);
+
+          vo.setSkuCount(count);
+
+            return vo;
+        }).collect(Collectors.toList());
+
+        return skuStockVos;
     }
 
 }
