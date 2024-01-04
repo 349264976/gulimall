@@ -1,21 +1,16 @@
 package com.atguigu.gulimall.product.service.impl;
 
-import com.alibaba.fastjson.TypeReference;
 import com.atguigu.common.TO.SkuHasStockVo;
 import com.atguigu.common.TO.SkuReductionTo;
 import com.atguigu.common.TO.SpuBoundTo;
 import com.atguigu.common.TO.es.SkuEsModel;
-import com.atguigu.common.constant.ProductConstant;
 import com.atguigu.common.utils.R;
 import com.atguigu.gulimall.product.entity.*;
 import com.atguigu.gulimall.product.fegin.CouponFeignService;
-import com.atguigu.gulimall.product.fegin.SearchFeignService;
 import com.atguigu.gulimall.product.fegin.WareFeignService;
 import com.atguigu.gulimall.product.service.*;
 import com.atguigu.gulimall.product.vo.*;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -69,9 +64,6 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
     @Autowired
     WareFeignService wareFeignService;
-
-    @Autowired
-    SearchFeignService searchFeignService;
 
 
     @Override
@@ -296,12 +288,11 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         ).collect(Collectors.toList());
         Map<Long, Boolean> hasStockMap = null;
 
-
+        R<List<SkuHasStockVo>> skusHasStock=new R<>();
         try {
             //TODO 1.发送远程调用是否有库存
-
-            R skusHasStock= wareFeignService.getSkusHasStock(skuIds);
-            hasStockMap = skusHasStock.getData(new TypeReference<List<SkuHasStockVo>>(){}).stream()
+            skusHasStock= wareFeignService.getSkusHasStock(skuIds);
+            hasStockMap = skusHasStock.getData().stream()
                     .collect(
                             Collectors.
                                     toMap(SkuHasStockVo::getSkuId, SkuHasStockVo::getHasStock));
@@ -338,28 +329,17 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
                     CategoryEntity categoryone = categoryService.getById(model.getCategoryId());
 
-                    esModel.setCatalogImg(categoryone==null?"default":categoryone.getIcon());
+                    esModel.setCatalogImg(categoryone.getIcon());
 
                     esModel.setAttrs(attrs);
                     return model;
                 }
         ).collect(Collectors.toList());
         //TODO 5.数据发送给es保存
-        R r = searchFeignService.prodductStatusUp(upProductions);
 
-        if (r.getCode()==0){
-            //远程上架成功
-            //TODO 修改商品状态
-            baseMapper.update(null,new LambdaUpdateWrapper<SpuInfoEntity>()
-                    .set(SpuInfoEntity::getPublishStatus, ProductConstant.StatusEnum.SPU_UP.getCode())
-                    .eq(SpuInfoEntity::getId,spuId)
-            );
 
-        }else {
-            //远程调用失败
-            //TODO 7.重复调用服务？幂等性问题 重试机制
 
-        }
+
     }
 
 }

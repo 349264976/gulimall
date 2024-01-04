@@ -98,7 +98,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             //数据库查询出数据封装    //查新当前sku的总库存量
           Long count= wareSkuDao.getSkuStock(skuid);
 
-          vo.setHasStock(count==null?false:count>0);
+          vo.setHasStock(count>0);
 
           vo.setSkuId(skuid);
 

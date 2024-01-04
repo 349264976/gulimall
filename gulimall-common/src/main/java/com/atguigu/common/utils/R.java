@@ -8,8 +8,6 @@
 
 package com.atguigu.common.utils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;
@@ -20,33 +18,17 @@ import java.util.Map;
  *
  * @author Mark sunlightcs@gmail.com
  */
-public class R extends HashMap<String, Object> {
+public class R<T> extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
 
-//	private T data;
-//
-//	public T getData() {
-//		return data;
-//	}
-//
+	private T data;
 
-	public R setData(Object data) {
-		put("data",data);
-
-		return this;
+	public T getData() {
+		return data;
 	}
 
-	/**
-	 * fastjson高级
-	 * @param typeReference
-	 * @return
-	 * @param <T>
-	 */
-	public <T> T getData(TypeReference<T> typeReference) {
-		Object o = get("data");
-		T t = JSON.parseObject(JSON.toJSONString(o), typeReference);
-
-		return t;
+	public void setData(T data) {
+		this.data = data;
 	}
 
 	public R() {
